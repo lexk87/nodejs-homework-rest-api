@@ -1,6 +1,13 @@
 const express = require('express');
-
+const contacts = require('../../models/contacts');
+const Joi = require('joi');
 const router = express.Router();
+
+const schema = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    phone: Joi.string().required(),
+});
 
 router.get('/', async (req, res, next) => {
     res.json({ message: 'template message' });
