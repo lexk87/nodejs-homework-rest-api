@@ -1,4 +1,5 @@
 const express = require('express');
+
 const { getAll, getById, add, deleteById, updateById } = require('../../controllers/contacts');
 const { validateBody } = require('../../middlewares');
 const { schema } = require('../../schemas/contacts');
