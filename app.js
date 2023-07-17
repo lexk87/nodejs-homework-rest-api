@@ -1,3 +1,7 @@
+// Логін і пароль до бази даних на MongoDB
+// DB_USER_LOGIN = Olexandr;
+// DB_PASSWORD = 5qU18XagKgehJHVI;
+
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
