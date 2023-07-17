@@ -8,12 +8,12 @@ const router = express.Router();
 
 router.get('/', getAll);
 
-router.get('/:id', getById);
+// router.get('/:id', getById);
 
 router.post('/', validateBody(schema), add);
 
-router.delete('/:id', deleteById);
+// router.delete('/:id', deleteById);
 
-router.put('/:id', validateBody(schema), updateById);
+// router.put('/:id', validateBody(schema), updateById);
 
 module.exports = router;
