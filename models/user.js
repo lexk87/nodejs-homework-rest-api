@@ -2,13 +2,13 @@ const { Schema, model } = require('mongoose');
 const { handleMongooseError } = require('../helpers');
 
 const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-const phoneRegex =
-    /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/;
 
-const contactSchema = new Schema(
+const userSchema = new Schema(
     {
         name: {
             type: String,
+            minLength: 3,
+            maxLength: 25,
             required: true,
         },
 
@@ -19,31 +19,24 @@ const contactSchema = new Schema(
             match: [emailRegex, 'Enter a valid email.'],
         },
 
-        phone: {
+        password: {
             type: String,
+            minLength: 8,
             required: true,
-            unique: true,
-            match: [phoneRegex, 'Enter a valid phone number.'],
         },
 
-        favorite: {
-            type: Boolean,
-            default: false,
-        },
-
-        owner: {
-            type: Schema.Types.ObjectId,
-            ref: 'user',
-            required: true,
+        token: {
+            type: String,
+            default: '',
         },
     },
     { versionKey: false, timestamps: true }
 );
 
-contactSchema.post('save', handleMongooseError);
+userSchema.post('save', handleMongooseError);
 
-const Contact = model('contact', contactSchema);
+const User = model('user', userSchema);
 
 module.exports = {
-    Contact,
+    User,
 };
