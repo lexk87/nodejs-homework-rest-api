@@ -4,6 +4,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = process.env;
 const gravatar = require('gravatar');
+const path = require('path');
+const fs = require('fs/promises');
+
+const avatarDir = path.join(__dirname, '../', 'public/avatars');
 
 const register = async (req, res) => {
     const { name, email, password } = req.body;
@@ -68,10 +72,25 @@ const logout = async (req, res) => {
     });
 };
 
-const updateAvatar = (module.exports = {
+const updateAvatar = async (req, res) => {
+    const { _id } = req.user;
+    const { path: tempUpload, originalname } = req.file;
+    const filename = `${_id}_${originalname}`;
+    const resultUpload = path.join(avatarDir, filename);
+
+    await fs.rename(tempUpload, resultUpload);
+
+    const avatarURL = path.join('avatars', filename);
+
+    await User.findByIdAndUpdate(_id, { avatarURL });
+
+    res.status(200).json({ avatarURL });
+};
+
+module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
     updateAvatar: ctrlWrapper(updateAvatar),
-});
+};
