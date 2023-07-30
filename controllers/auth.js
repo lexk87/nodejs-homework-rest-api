@@ -3,6 +3,7 @@ const { HttpError, ctrlWrapper } = require('../helpers');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = process.env;
+const gravatar = require('gravatar');
 
 const register = async (req, res) => {
     const { name, email, password } = req.body;
@@ -13,8 +14,8 @@ const register = async (req, res) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await User.create({ name, email, password: hashPassword });
+    const avatarURL = gravatar.url(email);
+    const newUser = await User.create({ name, email, password: hashPassword, avatarURL });
 
     res.status(201).json({
         name: newUser.name,
@@ -67,9 +68,10 @@ const logout = async (req, res) => {
     });
 };
 
-module.exports = {
+const updateAvatar = (module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
-};
+    updateAvatar: ctrlWrapper(updateAvatar),
+});
